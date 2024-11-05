@@ -40,6 +40,12 @@ Route::get('/vehicles/export', function () {
     return Excel::download(new VehiclesExport, 'vehicles.xlsx');
 })->name('vehicles.export');
 
-Route::get('/list_vehicle', [VehicleController::class, 'listVehicle'])->name('listVehicle');
+Route::prefix('list-vehicle')->name('listVehicle.')->group(function () {
+    Route::get('/list_vehicle', [VehicleController::class, 'listVehicle'])->name('vehicle');
+    // Route::get('vehicle-create', function () {
+    //     return Inertia::render('Create');
+    // })->name('createVehicle');
+    Route::get('/vehicle-create', [VehicleController::class, 'create'])->name('createVehicle');
+});
 
 require __DIR__ . '/auth.php';
