@@ -11,4 +11,5 @@ class Vehicle extends Model
     protected $connection = 'pgsql';
     protected $table = 'public.vehicles';
     public $timestamps = false;
+    protected $fillable = ['brand', 'name', 'price', 'seat', 'transmission', 'type'];
 }

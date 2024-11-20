@@ -46,6 +46,9 @@ Route::prefix('list-vehicle')->name('listVehicle.')->group(function () {
     //     return Inertia::render('Create');
     // })->name('createVehicle');
     Route::get('/vehicle-create', [VehicleController::class, 'create'])->name('createVehicle');
+    Route::post('/vehicles', [VehicleController::class, 'store'])->name('storeVehicle');
+    Route::post('/upload', [VehicleController::class, 'upload'])->name('upload');
+    Route::get('/data-uploaded', [VehicleController::class, 'dataUploaded'])->name('dataUploaded');
 });
 
 require __DIR__ . '/auth.php';
