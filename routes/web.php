@@ -41,6 +41,7 @@ Route::get('/vehicles/export', function () {
 })->name('vehicles.export');
 
 Route::prefix('list-vehicle')->name('listVehicle.')->group(function () {
+    Route::get('/', [VehicleController::class, 'index'])->name('index');
     Route::get('/list_vehicle', [VehicleController::class, 'listVehicle'])->name('vehicle');
     // Route::get('vehicle-create', function () {
     //     return Inertia::render('Create');

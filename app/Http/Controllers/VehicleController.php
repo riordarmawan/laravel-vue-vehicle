@@ -9,6 +9,12 @@ use Inertia\Inertia;
 
 class VehicleController extends Controller
 {
+
+    public function index()
+    {
+        return Inertia::render('ListVehicles/Index');
+    }
+
     public function listVehicle()
     {
         $data = Vehicle::select('id', 'brand', 'name', 'price', 'seat', 'transmission', 'type')

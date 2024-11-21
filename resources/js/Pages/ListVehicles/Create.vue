@@ -17,12 +17,16 @@ const submitForm = () => {
   axios.post(route('listVehicle.storeVehicle'), form.value)
     .then(response => {
       console.log("message", response.data.message);
-      // Inertia.visit(route('listVehicle.vehicle')); // Navigasi ke halaman daftar kendaraan tanpa `useRouter`
+      Inertia.visit(route('listVehicle.vehicle')); // Navigasi ke halaman daftar kendaraan tanpa `useRouter`
     })
     .catch(error => {
       console.error(error.response.data);
     });
 };
+
+const cancelForm = () => {
+  Inertia.visit(route('listVehicle.index'));
+}
 </script>
 
 <template>
@@ -61,6 +65,9 @@ const submitForm = () => {
       </div>
 
       <div class="text-center col-span-2 mt-8">
+        <button type="button" @click="cancelForm" class="px-6 py-3 mr-2 bg-gray-500 text-white rounded-lg">
+          Cancel
+        </button>
         <button type="submit" class="px-6 py-3 bg-indigo-600 text-white font-medium rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
           Submit
         </button>
