@@ -16,6 +16,8 @@ const handleFileUpload = (event) => {
   uploadForm.value.file = event.target.files[0];
 };
 
+const uploadedImageUrl = (fileName) => `/uploads/${fileName}`;
+
 const uploadData = () => {
   // Data dikirim ke server menggunakan FormData, yang mendukung pengunggahan file dan data teks secara bersamaan.
   const formData = new FormData();
@@ -30,6 +32,7 @@ const uploadData = () => {
   })
   .then(() => {
     alert('Data uploaded successfully!');
+    // uploadedImageUrl.value = `/uploads/${response.data.file.file_path}`;
     showUploadModal.value = false;
     uploadForm.value.text = '';
     uploadForm.value.description = '';
@@ -147,13 +150,25 @@ init()
           <td class="py-2 px-4 border-b">{{ file.file_name }}</td>
           <td class="py-2 px-4 border-b">{{ file.original_name }}</td>
           <td class="py-2 px-4 border-b">{{ new Date(file.created_at).toLocaleDateString() }}</td>
-          <td class="py-2 px-4 border-b">
+          <!-- <td class="py-2 px-4 border-b">
             <a :href="`/uploads/${file.file_name}`" target="_blank" class="text-blue-500 hover:underline">Download</a>
+          </td> -->
+          <td>
+            <!-- <img :src="uploadedImageUrl" alt="" class="mt-2 max-w-xs" /> -->
+            <img 
+              :src="`/storage/${file.file_name}`" 
+              alt="Uploaded File" 
+              class="w-16 h-16 object-cover border rounded" />
           </td>
         </tr>
       </tbody>
     </table>
   </div>
+
+  <!-- <div v-if="uploadedImageUrl">
+    <h3 class="mt-4">Uploaded Image:</h3>
+    <img :src="uploadedImageUrl" alt="Uploaded File" class="mt-2 max-w-xs" />
+  </div> -->
 
   <div v-if="showEditModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
     <div class="bg-white p-6 rounded-lg shadow-lg w-1/3">

@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import { Inertia } from '@inertiajs/inertia';
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
 
 const form = ref({
@@ -17,7 +18,15 @@ const submitForm = () => {
   axios.post(route('listVehicle.storeVehicle'), form.value)
     .then(response => {
       console.log("message", response.data.message);
-      Inertia.visit(route('listVehicle.vehicle')); // Navigasi ke halaman daftar kendaraan tanpa `useRouter`
+      Swal.fire({
+        title: 'Success!',
+        text: response.data.message || 'Vehicle has been successfully created.',
+        icon: 'success',
+        confirmButtonText: 'OK'
+      }).then(() => {
+         // Navigasi ke halaman daftar kendaraan
+        Inertia.visit(route('listVehicle.index'));
+      })
     })
     .catch(error => {
       console.error(error.response.data);

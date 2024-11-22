@@ -108,7 +108,7 @@ class VehicleController extends Controller
 
         // Simpan file ke direktori storage/app/uploads
         $file = $request->file('file');
-        $filePath = $file->store('uploads');
+        $filePath = $file->store('uploads', 'public');
 
         // Simpan metadata file ke database
         $uploadedFile = UploadedFile::create([
