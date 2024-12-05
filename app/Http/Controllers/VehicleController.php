@@ -77,15 +77,46 @@ class VehicleController extends Controller
         return redirect()->route('listVehicle.vehicle');
     }
 
+    public function goToEdit()
+    {
+        return Inertia::render('ListVehicles/Edit');
+    }
+
+    public function edit($id)
+    {
+        $vehicle = Vehicle::findOrFail($id); // Ambil data berdasarkan ID
+        return inertia::render('ListVehicles/Edit', [
+            'vehicle' => $vehicle
+        ]);
+        // return response()->json([
+        //     'vehicle' => $vehicle,
+        // ]);
+    }
+
+
 
     public function update(Request $request, $id)
     {
-        $vehicle = Vehicle::findOrFail($id);
-        $vehicle->update($request->only(['brand', 'name', 'price', 'seat', 'transmission', 'type']));
 
-        return response()->json([
-            'message' => 'update successfully'
+        $vehicle = Vehicle::findOrFail($id);
+
+        $request->validate([
+            'brand' => 'required|string',
+            'name' => 'required|string',
+            'price' => 'required|numeric',
+            'seat' => 'required|integer',
+            'transmission' => 'required|string',
+            'type' => 'required|string',
         ]);
+
+        $vehicle->update($request->all());
+
+        // return response()->json([
+        //     'message' => 'Vehicle updated successfully',
+        //     'vehicle' => $vehicle
+        // ]);
+
+        return redirect()->route('listVehicle.index')->with('success', 'Vehicle updated successfully');
     }
 
     public function dataUploaded()

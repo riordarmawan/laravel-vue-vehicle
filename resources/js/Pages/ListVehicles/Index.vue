@@ -60,6 +60,11 @@ const goToCreate = () => {
   Inertia.get(route('listVehicle.createVehicle'))
 }
 
+const goToEdit = (id) => {
+  Inertia.get(route('listVehicle.editVehicle', id));
+};
+
+
 const vehicles = ref([]);
 
 const getListVihicle = () => {
@@ -124,8 +129,9 @@ init()
           <td class="py-2 px-4 border-b">{{ vehicle.transmission }}</td>
           <td class="py-2 px-4 border-b">{{ vehicle.type }}</td>
           <td class="py-2 px-4 border-b">
-            <button @click="editVehicle(vehicle.id)" class="text-blue-500 hover:underline">Edit</button>
+            <button @click="goToEdit(vehicle.id)" class="text-blue-500 hover:underline">Edit</button>
           </td>
+
         </tr>
       </tbody>
     </table>

@@ -43,6 +43,13 @@ Route::get('/vehicles/export', function () {
 Route::prefix('list-vehicle')->name('listVehicle.')->group(function () {
     Route::get('/', [VehicleController::class, 'index'])->name('index');
     Route::get('/list_vehicle', [VehicleController::class, 'listVehicle'])->name('vehicle');
+
+    Route::get('/vehicle-edit/{id}', [VehicleController::class, 'edit'])->name('editVehicle');
+    Route::put('/vehicle-update/{id}', [VehicleController::class, 'update'])->name('updateVehicle');
+
+
+    // Route::get('/vehicles/{id}/edit', [VehicleController::class, 'edit'])->name('edit');
+    // Route::put('/vehicles/{id}/update', [VehicleController::class, 'update'])->name('listVehicle.update');
     // Route::get('vehicle-create', function () {
     //     return Inertia::render('Create');
     // })->name('createVehicle');
