@@ -102,19 +102,29 @@ const exportToPdf = () => {
 
     // Tambahkan margin
     const margin = 5; // Margin dalam mm (kiri, kanan, atas, bawah)
-    const imgWidth = pageWidth - 2 * margin;
-    const imgHeight = (canvas.height * imgWidth) / canvas.width; // Rasio ukuran
+    const maxImgWidth = pageWidth - 2 * margin;
+    const maxImgHeight = pageHeight - 2 * margin;
+
+    // Skala gambar agar sesuai dengan ukuran halaman
+    const imgWidth = maxImgWidth;
+    const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
     // Posisi gambar dengan margin
     const posX = margin;
     const posY = margin;
 
-     // Jika tinggi gambar lebih besar dari halaman, tambahkan logika halaman baru
-     if (imgHeight + 2 * margin > pageHeight) {
-      console.warn('Konten lebih panjang dari satu halaman, pastikan logika pagination ditambahkan.');
-    }
+     // Jika gambar melebihi tinggi halaman, tambahkan halaman baru
+    if (imgHeight > maxImgHeight) {
+      const imgPerPageHeight = maxImgHeight;
 
-    pdf.addImage(imgData, 'PNG', posX, posY, imgWidth, imgHeight);
+      while (posY + imgPerPageHeight <= imgHeight) {
+        pdf.addImage(imgData, 'PNG', posX, posY, imgWidth, imgPerPageHeight);
+        pdf.addPage(); // Tambahkan halaman baru
+        posY = margin; // Reset posisi ke atas halaman baru
+      }
+    } else {
+      pdf.addImage(imgData, 'PNG', posX, posY, imgWidth, imgHeight);
+    }
 
     pdf.save('list-vehicles.pdf'); // Nama file PDF
   })
