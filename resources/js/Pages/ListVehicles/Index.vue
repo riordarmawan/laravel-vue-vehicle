@@ -4,6 +4,8 @@ import { ref, onMounted } from 'vue';
 import { Inertia } from '@inertiajs/inertia';
 import axios from 'axios';
 import { route } from 'ziggy-js';
+import { jsPDF } from 'jspdf';
+import html2canvas from 'html2canvas';
 
 const showUploadModal = ref(false);
 const uploadForm = ref({
@@ -87,6 +89,37 @@ const exportToExcel = () => {
   window.location.href = route('vehicles.export');
 };
 
+const exportToPdf = () => {
+  const tableElement = document.querySelector('.min-w-full'); //elemen tabel
+
+  html2canvas(tableElement).then((canvas) => {
+    const imgData = canvas.toDataURL('image/png'); // ubah ke format gambar
+    const pdf = new jsPDF('p', 'mm', 'a4');
+
+     // Atur ukuran halaman PDF
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight();
+
+    // Tambahkan margin
+    const margin = 5; // Margin dalam mm (kiri, kanan, atas, bawah)
+    const imgWidth = pageWidth - 2 * margin;
+    const imgHeight = (canvas.height * imgWidth) / canvas.width; // Rasio ukuran
+
+    // Posisi gambar dengan margin
+    const posX = margin;
+    const posY = margin;
+
+     // Jika tinggi gambar lebih besar dari halaman, tambahkan logika halaman baru
+     if (imgHeight + 2 * margin > pageHeight) {
+      console.warn('Konten lebih panjang dari satu halaman, pastikan logika pagination ditambahkan.');
+    }
+
+    pdf.addImage(imgData, 'PNG', posX, posY, imgWidth, imgHeight);
+
+    pdf.save('list-vehicles.pdf'); // Nama file PDF
+  })
+}
+
 const init = () => {
   getListVihicle();
   getDataUpload();
@@ -103,6 +136,7 @@ init()
                 <button @click="goToCreate" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Create</button>
                 <button @click="exportToExcel" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Export Excel</button>
                 <button @click="showUploadModal = true" class="bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-600">Upload</button>
+                <button @click="exportToPdf" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Export PDF</button>
             </div>
         </div>
   
