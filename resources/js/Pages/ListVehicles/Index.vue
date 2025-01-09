@@ -6,7 +6,9 @@ import axios from 'axios';
 import { route } from 'ziggy-js';
 import { jsPDF } from 'jspdf';
 import html2canvas from 'html2canvas';
+import Swal from 'sweetalert2';
 
+//  Start function upload
 const showUploadModal = ref(false);
 const uploadForm = ref({
   text: '',
@@ -33,17 +35,22 @@ const uploadData = () => {
     },
   })
   .then(() => {
-    alert('Data uploaded successfully!');
-    // uploadedImageUrl.value = `/uploads/${response.data.file.file_path}`;
-    showUploadModal.value = false;
-    uploadForm.value.text = '';
-    uploadForm.value.description = '';
-    uploadForm.value.file = null;
+    Swal.fire({
+      title: 'Success!',
+      text: 'File uploaded successfully!',
+      icon: 'success',
+      confirmButtonText: 'OK',
+    }).then(() => {
+      window.location.reload(); // Refresh halaman
+    }).catch((error) => {
+        Swal.fire({
+        title: 'Error!',
+        text: 'Failed to upload data. Please try again.',
+        icon: 'error',
+        confirmButtonText: 'OK',
+      });
+    });
   })
-  .catch((error) => {
-    console.error('Upload failed:', error);
-    alert('Failed to upload data. Please try again.');
-  });
 };
 
 const listUploadedFiles = ref([])
@@ -57,6 +64,8 @@ const getDataUpload = () => {
 
   })
 }
+
+//  End function upload
 
 const goToCreate = () => {
   Inertia.get(route('listVehicle.createVehicle'))
@@ -85,10 +94,13 @@ const getListVihicle = () => {
   })
 }
 
+//  Start function export excel
 const exportToExcel = () => {
   window.location.href = route('vehicles.export');
 };
+//  End function export excel
 
+//  Start function export pdf
 const exportToPdf = () => {
   const tableElement = document.querySelector('.min-w-full'); //elemen tabel
 
@@ -129,6 +141,7 @@ const exportToPdf = () => {
     pdf.save('list-vehicles.pdf'); // Nama file PDF
   })
 }
+// End function export pdf
 
 const init = () => {
   getListVihicle();
@@ -181,39 +194,18 @@ init()
     </table>
   </div>
 
-  <div class="p-6 bg-gray-100">
-    <h2 class="text-2xl font-bold mb-4">Uploaded Files</h2>
-
-    <table class="min-w-full bg-white border rounded-lg overflow-hidden">
-      <thead>
-        <tr>
-          <th class="py-2 px-4 border-b">ID</th>
-          <th class="py-2 px-4 border-b">File Name</th>
-          <th class="py-2 px-4 border-b">Original Name</th>
-          <th class="py-2 px-4 border-b">Upload Date</th>
-          <th class="py-2 px-4 border-b">Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="file in listUploadedFiles" :key="file.id">
-          <td class="py-2 px-4 border-b">{{ file.id }}</td>
-          <td class="py-2 px-4 border-b">{{ file.file_name }}</td>
-          <td class="py-2 px-4 border-b">{{ file.original_name }}</td>
-          <td class="py-2 px-4 border-b">{{ new Date(file.created_at).toLocaleDateString() }}</td>
-          <!-- <td class="py-2 px-4 border-b">
-            <a :href="`/uploads/${file.file_name}`" target="_blank" class="text-blue-500 hover:underline">Download</a>
-          </td> -->
-          <td>
-            <!-- <img :src="uploadedImageUrl" alt="" class="mt-2 max-w-xs" /> -->
-            <img 
-              :src="`/storage/${file.file_name}`" 
-              alt="Uploaded File" 
-              class="w-16 h-16 object-cover border rounded" />
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+  <section class="p-6 bg-gray-100">
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+        <!-- Single Card -->
+        <div v-for="file in listUploadedFiles" :key="file.id" class="bg-white shadow rounded-lg overflow-hidden">
+          <img :src="`/storage/${file.file_path}`" alt="Uploaded File" class="w-full h-48 text-gray-600">
+          <div class="p-4">
+            <h2 class="text-lg font-bold">{{ file.file_name }}</h2>
+            <p class="text-sm text-gray-600 mt-2">{{ new Date(file.created_at).toLocaleDateString() }}</p>
+          </div>
+        </div>
+      </div>
+    </section>
 
   <!-- <div v-if="uploadedImageUrl">
     <h3 class="mt-4">Uploaded Image:</h3>
