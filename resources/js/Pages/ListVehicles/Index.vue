@@ -41,7 +41,10 @@ const uploadData = () => {
       icon: 'success',
       confirmButtonText: 'OK',
     }).then(() => {
-      window.location.reload(); // Refresh halaman
+      // window.location.reload(); // Refresh halaman
+      getDataUpload(); // Memperbarui daftar file
+      showUploadModal.value = false; // Menutup modal upload
+      uploadForm.value = { description: '', file: null }; // Reset form
     }).catch((error) => {
         Swal.fire({
         title: 'Error!',
