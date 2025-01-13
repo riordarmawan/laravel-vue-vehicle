@@ -146,6 +146,54 @@ const exportToPdf = () => {
 }
 // End function export pdf
 
+// start function delete
+const deleteVehicle = (id) => {
+  // if(!confirm("Are you sure you want to delete this vehicle?")) {
+  //   return; // Batal jika user memilih "Cancel"
+  // }
+
+  Swal.fire({
+    title: 'Are you sure?',
+    text: "You won't be able to revert this!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes, delete it!',
+    cancelButtonText: 'Cancel',
+  }).then((result) => {
+    if(result.isConfirmed) {
+      axios.delete(route('listVehicle.delete', { id }))
+      .then(() => {
+        Swal.fire(
+          'Deleted!',
+          'The vehicle has been deleted.',
+          'success'
+        );
+        getListVihicle();
+      })
+      .catch((error) => {
+        Swal.fire(
+          'Error!',
+          'Failed to delete the vehicle. Please try again.',
+          'error'
+        );
+      });
+    }
+  })
+
+  // axios.delete(route('listVehicle.delete', { id }))
+  // .then(() => {
+  //   alert("Vehicle deleted successfully!");
+  //   getListVihicle();
+  // })
+  // .catch((error) => {
+  //   console.error("Failed to delete vehicle:", error);
+  //   alert("Failed to delete vehicle. Please try again.");
+  // });
+}
+// end function delete
+
 const init = () => {
   getListVihicle();
   getDataUpload();
@@ -190,6 +238,7 @@ init()
           <td class="py-2 px-4 border-b">{{ vehicle.type }}</td>
           <td class="py-2 px-4 border-b">
             <button @click="goToEdit(vehicle.id)" class="text-blue-500 hover:underline">Edit</button>
+            <button @click="deleteVehicle(vehicle.id)" class="text-red-500 hover:underline ml-2">Delete</button>
           </td>
 
         </tr>

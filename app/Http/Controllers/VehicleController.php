@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\UploadedFile;
 use App\Models\Vehicle;
+use GuzzleHttp\Psr7\Message;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -159,5 +160,26 @@ class VehicleController extends Controller
             // 'text' => $request->text,
             'description' => $request->description
         ]);
+    }
+
+    public function destroy($id)
+    {
+        // Cari data berdasarkan ID
+        $vehicle = Vehicle::find($id);
+
+        // Jika data tidak ditemukan, kembalikan response error
+        if (!$vehicle) {
+            return response()->json([
+                'message' => 'vehicle not found'
+            ], 404);
+        }
+
+        // hapus data
+        $vehicle->delete();
+
+        // Kembalikan response berhasil
+        return response()->json([
+            'message' => 'vehicle deleted successfully'
+        ], 200);
     }
 }

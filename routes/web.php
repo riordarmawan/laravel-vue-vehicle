@@ -57,6 +57,7 @@ Route::prefix('list-vehicle')->name('listVehicle.')->group(function () {
     Route::post('/vehicles', [VehicleController::class, 'store'])->name('storeVehicle');
     Route::post('/upload', [VehicleController::class, 'upload'])->name('upload');
     Route::get('/data-uploaded', [VehicleController::class, 'dataUploaded'])->name('dataUploaded');
+    Route::delete('/vehicles/{id}', [VehicleController::class, 'destroy'])->name('delete');
 });
 
 require __DIR__ . '/auth.php';
